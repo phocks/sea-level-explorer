@@ -19,7 +19,7 @@
     const url = URL.createObjectURL(blob);
     const link = document.createElement("a");
     link.href = url;
-    link.download = `sea-level-map-${yearsAgo}-years-ago.svg`;
+    link.download = `${yearsAgo}-years-ago-sea-level-map.svg`;
     link.click();
   }
 </script>

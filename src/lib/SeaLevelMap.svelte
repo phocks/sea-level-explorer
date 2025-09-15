@@ -77,6 +77,7 @@
 
   let path = $derived(d3.geoPath().projection(projection));
 
+  // We are filtering out lakes in the middle of the continent
   const bbox1: any = [135.742, -29.756, 138.647, -26.851];
   const bbox2: any = [139.38, -34.84, 141.54, -28.82];
 
