@@ -1,6 +1,8 @@
 <script lang="ts">
   import seaLevels from "../assets/sealevels-daily_data_last.json";
   import contours from "../assets/Merged_0_to_150.geo.json";
+  import booleanIntersects from "@turf/boolean-intersects";
+  import { bboxPolygon } from "@turf/bbox-polygon";
 
   import * as d3GeoProjection from "d3-geo-projection";
   import * as d3Geo from "d3-geo";
@@ -75,10 +77,23 @@
 
   let path = $derived(d3.geoPath().projection(projection));
 
+  const bbox1: any = [135.742, -29.756, 138.647, -26.851];
+  const bbox2: any = [139.38, -34.84, 141.54, -28.82];
+
+  const boundsPolygon = bboxPolygon(bbox1);
+  const boundsPolygon2 = bboxPolygon(bbox2);
+
   const getFilteredGeoJson = (seaLevel: number) => {
     const filteredGeoJson = contours.features.filter(
       (feature: any) => feature.properties.ELEV === seaLevel,
     );
+
+    const filteredBounds = filteredGeoJson.filter(
+      (feature: any) =>
+        !booleanIntersects(feature, boundsPolygon) &&
+        !booleanIntersects(feature, boundsPolygon2),
+    );
+
     return {
       type: "FeatureCollection",
       name: "Merged_0_to_150",
@@ -86,16 +101,12 @@
         type: "name",
         properties: { name: "urn:ogc:def:crs:OGC:1.3:CRS84" },
       },
-      features: filteredGeoJson,
+      features: filteredBounds,
     };
   };
 </script>
 
-<div
- 
-  class="sea-level-map"
-  style="--width: {rootWidth}px; --height: {height}px"
->
+<div class="sea-level-map" style="--width: {rootWidth}px; --height: {height}px">
   <svg
     id="sea-level-map-svg-element"
     width={rootWidth}
@@ -103,7 +114,7 @@
     xmlns="http://www.w3.org/2000/svg"
     xmlns:xlink="http://www.w3.org/1999/xlink"
   >
-  <rect width="100%" height="100%" fill="#252c5a" />
+    <rect width="100%" height="100%" fill="#252c5a" />
     <path
       d={path(getFilteredGeoJson(roundSeaLevel5))}
       fill="hsl(223, 18%, 46%)"
