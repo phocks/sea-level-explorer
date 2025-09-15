@@ -25,9 +25,9 @@
 </script>
 
 <main>
-  <SeaLevelMap {yearsAgo} />
   <button onclick={() => (yearsAgo -= YEARS_STEP)}>{yearsAgo}</button>
   <button onclick={exportSVG}>Export SVG</button>
+  <SeaLevelMap {yearsAgo} />
 </main>
 
 <style lang="scss">
@@ -35,5 +35,6 @@
     border: 1px solid black;
     padding: 0.1em 0.3em;
     margin-top: 0.2em;
+    margin-bottom: 0.2em;
   }
 </style>

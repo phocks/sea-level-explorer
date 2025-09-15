@@ -42,7 +42,7 @@
 
   let { yearsAgo = 0 }: Props = $props();
 
-  let rootWidth = $state(600);
+  let rootWidth = $state(1440);
 
   function roundToNearest10(num: number): number {
     return Math.round(num / 10) * 10;
@@ -92,27 +92,18 @@
 </script>
 
 <div
-  bind:clientWidth={rootWidth}
+ 
   class="sea-level-map"
   style="--width: {rootWidth}px; --height: {height}px"
 >
-  <svg id="sea-level-map-svg-element" width={rootWidth} {height}>
-    <defs>
-      <pattern
-        id="texture-pattern"
-        patternUnits="userSpaceOnUse"
-        width={rootWidth}
-        height={rootWidth}
-      >
-        <!-- <image
-            href={texture}
-            x="0"
-            y="0"
-            width={rootWidth}
-            height={rootWidth}
-          /> -->
-      </pattern>
-    </defs>
+  <svg
+    id="sea-level-map-svg-element"
+    width={rootWidth}
+    {height}
+    xmlns="http://www.w3.org/2000/svg"
+    xmlns:xlink="http://www.w3.org/1999/xlink"
+  >
+  <rect width="100%" height="100%" fill="#252c5a" />
     <path
       d={path(getFilteredGeoJson(roundSeaLevel5))}
       fill="hsl(223, 18%, 46%)"
@@ -129,10 +120,6 @@
 </div>
 
 <style lang="scss">
-  .sea-level-map {
-    background-color: #252c5a;
-  }
-
   svg {
     display: block;
   }
