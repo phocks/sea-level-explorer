@@ -22,11 +22,18 @@
     link.download = `${yearsAgo}-years-ago-sea-level-map.svg`;
     link.click();
   }
+
+  function processNextTimePeriod() {
+    exportSVG();
+    setTimeout(() => {
+      yearsAgo -= YEARS_STEP;
+    }, 200);
+  }
 </script>
 
 <main>
-  <button onclick={() => (yearsAgo -= YEARS_STEP)}>{yearsAgo}</button>
-  <button onclick={exportSVG}>Export SVG</button>
+  <button onclick={processNextTimePeriod}>{yearsAgo}</button>
+  <!-- <button onclick={exportSVG}>Export SVG</button> -->
   <SeaLevelMap {yearsAgo} />
 </main>
 
