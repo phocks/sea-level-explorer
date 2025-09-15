@@ -40,7 +40,7 @@
     yearsAgo?: number;
   }
 
-  let { yearsAgo = 63000 }: Props = $props();
+  let { yearsAgo = 0 }: Props = $props();
 
   let rootWidth = $state(600);
 
@@ -58,6 +58,7 @@
   let seaLevel = $derived(scale(-yearsAgo) ?? 0);
   let roundSeaLevel10 = $derived(roundToNearest10(seaLevel));
   let roundSeaLevel5 = $derived(roundToNearest5(seaLevel));
+  $inspect("yearsAgo:", yearsAgo, "seaLevel:", roundSeaLevel5);
 
   let projection = $derived(
     d3.geoPatterson().fitExtent(
@@ -95,7 +96,7 @@
   class="sea-level-map"
   style="--width: {rootWidth}px; --height: {height}px"
 >
-  <svg style="background-color: #252c5a;" width={rootWidth} {height}>
+  <svg id="sea-level-map-svg-element" width={rootWidth} {height}>
     <defs>
       <pattern
         id="texture-pattern"
@@ -112,7 +113,10 @@
           /> -->
       </pattern>
     </defs>
-    <path d={path(getFilteredGeoJson(roundSeaLevel5))} fill="hsl(223, 18%, 46%)" />
+    <path
+      d={path(getFilteredGeoJson(roundSeaLevel5))}
+      fill="hsl(223, 18%, 46%)"
+    />
 
     <path
       d={path(getFilteredGeoJson(0))}
@@ -123,3 +127,13 @@
     />
   </svg>
 </div>
+
+<style lang="scss">
+  .sea-level-map {
+    background-color: #252c5a;
+  }
+
+  svg {
+    display: block;
+  }
+</style>
