@@ -3,6 +3,7 @@
   const YEARS_STEP = 250;
 
   let yearsAgo = $state(65000);
+  let seaLevel = $state(0);
 
   function exportSVG() {
     const svgElement = document.getElementById("sea-level-map-svg-element");
@@ -19,7 +20,7 @@
     const url = URL.createObjectURL(blob);
     const link = document.createElement("a");
     link.href = url;
-    link.download = `${yearsAgo}-years-ago-sea-level-map.svg`;
+    link.download = `${yearsAgo}-years-ago-${Math.abs(seaLevel).toString()}-below.svg`;
     link.click();
   }
 
@@ -29,12 +30,13 @@
       yearsAgo -= YEARS_STEP;
     }, 200);
   }
+
+  $inspect("yearsAgo:", yearsAgo, "seaLevel:", seaLevel);
 </script>
 
 <main>
   <button onclick={processNextTimePeriod}>{yearsAgo}</button>
-  <!-- <button onclick={exportSVG}>Export SVG</button> -->
-  <SeaLevelMap {yearsAgo} />
+  <SeaLevelMap {yearsAgo} onChangeYearsAgo={(sl) => (seaLevel = sl)} />
 </main>
 
 <style lang="scss">

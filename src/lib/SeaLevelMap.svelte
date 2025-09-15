@@ -40,9 +40,10 @@
 
   interface Props {
     yearsAgo?: number;
+    onChangeYearsAgo?: (yearsAgo: number) => void;
   }
 
-  let { yearsAgo = 0 }: Props = $props();
+  let { yearsAgo = 0, onChangeYearsAgo }: Props = $props();
 
   let rootWidth = $state(1440);
 
@@ -60,7 +61,7 @@
   let seaLevel = $derived(scale(-yearsAgo) ?? 0);
   let roundSeaLevel10 = $derived(roundToNearest10(seaLevel));
   let roundSeaLevel5 = $derived(roundToNearest5(seaLevel));
-  $inspect("yearsAgo:", yearsAgo, "seaLevel:", roundSeaLevel5);
+  // $inspect("yearsAgo:", yearsAgo, "seaLevel:", roundSeaLevel5);
 
   let projection = $derived(
     d3.geoPatterson().fitExtent(
@@ -105,6 +106,10 @@
       features: filteredBounds,
     };
   };
+
+  $effect(() => {
+    onChangeYearsAgo?.(roundSeaLevel5);
+  });
 </script>
 
 <div class="sea-level-map" style="--width: {rootWidth}px; --height: {height}px">
